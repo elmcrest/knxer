@@ -1,0 +1,12 @@
+{
+    "elements": [
+        {
+            "type": "NumberSpinner",
+            "name": "UpdateInterval",
+            "caption": "Update Interval",
+            "suffix": "hour(s)"
+        }
+    ],
+    "actions": [],
+    "status": []
+}

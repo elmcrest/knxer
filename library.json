@@ -1,0 +1,12 @@
+{
+    "id": "{65272793-BBDE-82D8-E652-6BBB8068B0DD}",
+    "author": "Marius Räsener",
+    "name": "KNXer",
+    "url": "https://knxer.raesener.de",
+    "compatibility": {
+        "version": "5.3"
+    },
+    "version": "1",
+    "build": 0,
+    "date": 1578491500
+}

@@ -1,0 +1,14 @@
+{
+    "id": "{9E4B7738-F674-AA63-BF53-0C44E2D80342}",
+    "name": "Versionspruefung",
+    "type": 3,
+    "vendor": "",
+    "aliases": [
+        "Versionsprüfung"
+    ],
+    "url": "https://knxer.raesener.de",
+    "parentRequirements": [],
+    "childRequirements": [],
+    "implemented": [],
+    "prefix": "VP"
+}
