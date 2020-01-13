@@ -1,10 +1,14 @@
 {
     "elements": [
         {
-            "type": "NumberSpinner",
-            "name": "UpdateInterval",
-            "caption": "Update Interval",
-            "suffix": "hour(s)"
+            "type": "Label",
+            "label": "Welcome to KNXer. Please read https://knxer.raesener.de before proceeding."
+        },
+        {
+            "type": "SelectFile",
+            "name": "EtsXmlFile",
+            "caption": "ETS 5 XML GA Datei",
+            "extensions": ".xml"
         }
     ],
     "actions": [],

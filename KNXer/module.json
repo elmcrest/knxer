@@ -1,14 +1,14 @@
 {
     "id": "{9E4B7738-F674-AA63-BF53-0C44E2D80342}",
-    "name": "Versionspruefung",
+    "name": "knxer",
     "type": 3,
-    "vendor": "",
+    "vendor": "KNXer",
     "aliases": [
-        "Versionsprüfung"
+        "KNXer"
     ],
     "url": "https://knxer.raesener.de",
     "parentRequirements": [],
     "childRequirements": [],
     "implemented": [],
-    "prefix": "VP"
+    "prefix": "KX"
 }
