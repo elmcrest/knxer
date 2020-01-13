@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
@@ -10,8 +11,8 @@ include_once __DIR__ . '/stubs/MessageStubs.php';
 
 class WhateverTest extends TestCase
 {
-    private $versionsPruefungID = "{9E4B7738-F674-AA63-BF53-0C44E2D80342}";
-    
+    private $versionsPruefungID = '{9E4B7738-F674-AA63-BF53-0C44E2D80342}';
+
     public function setUp(): void
     {
         //Reset
@@ -20,7 +21,8 @@ class WhateverTest extends TestCase
         IPS\ModuleLoader::loadLibrary(__DIR__ . '/../library.json');
         parent::setUp();
     }
-    public function testSum() {
+    public function testSum()
+    {
         $var1 = 3;
         $var2 = 4;
 
