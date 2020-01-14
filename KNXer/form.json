@@ -12,5 +12,11 @@
         }
     ],
     "actions": [],
-    "status": []
+    "status": [
+        {
+            "code": 201,
+            "icon": "error",
+            "caption": "XML File couldn't be parsed. Is it a ETS 5 XML Export file?"
+        }
+    ]
 }
