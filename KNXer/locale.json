@@ -4,7 +4,10 @@
             "hour(s)": "Stunde(n)",
             "Update Interval": "Update Intervall",
             "Current Version": "Aktuelle Version",
-            "Available Version": "Verfügbarssse Version"
+            "Available Version": "Verfügbarssse Version",
+            "Error converting group addresses:": "Fehler beim konvertieren der Gruppenadressen:",
+            "XML File couldn't be parsed. Is it a ETS5 XML Export file?": "Konnte die XML Datei nicht interpretieren. Ist es ein ETS5 XML Export Datei?",
+            "XML File didn't meet the requirements. Is it a ETS5 XML Export file?": "Die Datei erfüllt nicht die Anforderungen. Ist es eine ETS5 XML Export Datei?"
         }
     }
 }

@@ -1,46 +1,45 @@
 <?php
 
 declare(strict_types=1);
-// Klassendefinition
+
 class KNXer extends IPSModule
 {
-    // Überschreibt die interne IPS_Create($id) Funktion
     public function Create()
     {
-        // Diese Zeile nicht löschen.
         parent::Create();
 
-        // $this->RegisterPropertyInteger("UpdateInterval", 12);
-
-        // $this->RegisterVariableString("currentVersion", $this->Translate("Current Version"));
-        // $this->RegisterVariableString("availableVersion", $this->Translate("Available Version"));
-
-        // $this->RegisterTimer("CheckVersion", 0, "KX_UpdateVersion({$this->InstanceID});");
         $this->RegisterPropertyString('EtsXmlFile', '');
     }
 
-    // Überschreibt die intere IPS_ApplyChanges($id) Funktion
     public function ApplyChanges()
     {
-        $data = json_decode(file_get_contents(__DIR__ . '/form.json'));
         $rawData = base64_decode($this->ReadPropertyString('EtsXmlFile'));
 
         if (@simplexml_load_string($rawData)) {
             $data = simplexml_load_string($rawData);
+            print_r($data, true);
             $name = $data->GroupRange[13]->GroupRange[0]->GroupAddress[0]['Name'];
             $this->SendDebug('KNXer', (string) $name, 0);
+            $this->SetStatus(101);
         } else {
-            $this->SendDebug('KNXer', 'Errrooooor', 0);
             $this->SetStatus(201);
+            $this->ShowLastError("XML File couldn't be parsed. Is it a ETS5 XML Export file?");
         }
 
-        // Diese Zeile nicht löschen
         parent::ApplyChanges();
     }
 
     // KX_ValidateEtsXmlGroupAddressExport($id)
-    public function ValidateEtsXmlGroupAddressExport()
+    // public function ValidateEtsXmlGroupAddressExport()
+    // {
+    // }
+
+    protected function ShowLastError(string $ErrorMessage, string $ErrorTitle = 'Error converting group addresses:')
     {
+        IPS_Sleep(500);
+        $this->UpdateFormField('ErrorTitle', 'caption', $ErrorTitle);
+        $this->UpdateFormField('ErrorText', 'caption', $ErrorMessage);
+        $this->UpdateFormField('ErrorPopup', 'visible', true);
     }
     /**
      * Die folgenden Funktionen stehen automatisch zur Verfügung, wenn das Modul über die "Module Control" eingefügt wurden.

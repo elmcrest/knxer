@@ -9,6 +9,25 @@
             "name": "EtsXmlFile",
             "caption": "ETS 5 XML GA Datei",
             "extensions": ".xml"
+        },
+        {
+            "name": "ErrorPopup",
+            "type": "PopupAlert",
+            "visible": false,
+            "popup": {
+                "items": [
+                    {
+                        "name": "ErrorTitle",
+                        "type": "Label",
+                        "caption": ""
+                    },
+                    {
+                        "name": "ErrorText",
+                        "type": "Label",
+                        "caption": ""
+                    }
+                ]
+            }
         }
     ],
     "actions": [],
@@ -16,7 +35,12 @@
         {
             "code": 201,
             "icon": "error",
-            "caption": "XML File couldn't be parsed. Is it a ETS 5 XML Export file?"
+            "caption": "XML File couldn't be parsed. Is it a ETS5 XML Export file?"
+        },
+        {
+            "code": 202,
+            "icon": "error",
+            "caption": "XML File didn't meet the requirements. Is it a ETS5 XML Export file?"
         }
     ]
 }
