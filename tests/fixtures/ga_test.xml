@@ -14,7 +14,7 @@
   <GroupRange Name="Vorderhaus/OG/SchlafZi" RangeStart="22528" RangeEnd="24575" />
   <GroupRange Name="Vorderhaus/OG/WC" RangeStart="24576" RangeEnd="26623" />
   <GroupRange Name="Vorderhaus/OG/Bad" RangeStart="26624" RangeEnd="28671">
-    <GroupRange Name="Aktoren" RangeStart="26624" RangeEnd="26879">
+    <GroupRange Name="actuators" RangeStart="26624" RangeEnd="26879">
       <GroupAddress Name="Stripe" Address="13/0/0" Description="light dimmed switch" DPTs="DPST-1-1" />
       <GroupAddress Name="Stripe" Address="13/0/1" Description="light dimmed change" DPTs="DPST-3-7" />
       <GroupAddress Name="Stripe" Address="13/0/2" Description="light dimmed value" DPTs="DPST-5-1" />
@@ -28,7 +28,7 @@
       <GroupAddress Name="Rollo" Address="13/0/10" Description="shading state position" />
       <GroupAddress Name="Rollo" Address="13/0/11" Description="shading drive position" />
     </GroupRange>
-    <GroupRange Name="Sensoren" RangeStart="26880" RangeEnd="27135" />
+    <GroupRange Name="sensors" RangeStart="26880" RangeEnd="27135" />
   </GroupRange>
   <GroupRange Name="Vorderhaus/DG" RangeStart="28672" RangeEnd="30719" />
 </GroupAddress-Export>

@@ -25,9 +25,9 @@ class KNXerTest extends TestCase
     public function testParseNonXml()
     {
         $KNXerModulID = IPS_CreateInstance($this->KNXerID);
-        $file = file_get_contents(__DIR__ . '/fixtures/ga_test.txt', true);
+        $filestring = base64_encode(file_get_contents(__DIR__ . '/fixtures/ga_test.txt', true));
 
-        IPS_SetProperty($KNXerModulID, 'EtsXmlFile', $file);
+        IPS_SetProperty($KNXerModulID, 'EtsXmlFile', $filestring);
         IPS_ApplyChanges($KNXerModulID);
 
         $KNXerInstance = IPS_GetInstance($KNXerModulID);
@@ -36,26 +36,26 @@ class KNXerTest extends TestCase
     public function testParseWrongXml()
     {
         $KNXerModulID = IPS_CreateInstance($this->KNXerID);
-        $file = file_get_contents(__DIR__ . '/fixtures/ga_test_ets4.xml', true);
+        // base64_encode to simulte upload via webinterface
+        $filestring = base64_encode(file_get_contents(__DIR__ . '/fixtures/ga_test_ets4.xml', true));
 
-        IPS_SetProperty($KNXerModulID, 'EtsXmlFile', $file);
+        IPS_SetProperty($KNXerModulID, 'EtsXmlFile', $filestring);
         IPS_ApplyChanges($KNXerModulID);
 
         $KNXerInstance = IPS_GetInstance($KNXerModulID);
-        $this->assertEquals(201, $KNXerInstance['InstanceStatus']);
+        $this->assertEquals(202, $KNXerInstance['InstanceStatus']);
     }
     public function testParseXml()
     {
         $KNXerModulID = IPS_CreateInstance($this->KNXerID);
-        $file = file_get_contents(__DIR__ . '/fixtures/ga_test.xml', true);
-        xdebug_break();
-        echo IPS_GetInstance($KNXerModulID)['InstanceStatus'];
-        IPS_SetProperty($KNXerModulID, 'EtsXmlFile', $file);
+        $filestring = base64_encode(file_get_contents(__DIR__ . '/fixtures/ga_test.xml', true));
+
+        IPS_SetProperty($KNXerModulID, 'EtsXmlFile', $filestring);
         IPS_ApplyChanges($KNXerModulID);
 
         $KNXerInstance = IPS_GetInstance($KNXerModulID);
         // fwrite(STDERR, print_r($KNXerInstance, true));
-        // $this->assertEquals(101, $KNXerInstance['InstanceStatus']);
-        $this->assertEquals(1, 1);
+        $this->assertEquals(101, $KNXerInstance['InstanceStatus']);
+        // $this->assertEquals(1, 1);
     }
 }
