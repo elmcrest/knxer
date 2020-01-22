@@ -47,6 +47,7 @@ class KNXerTest extends TestCase
     }
     public function testParseXml()
     {
+        echo "\n#################START#####################\n";
         $KNXerModulID = IPS_CreateInstance($this->KNXerID);
         $filestring = base64_encode(file_get_contents(__DIR__ . '/fixtures/ga_test.xml', true));
 
@@ -54,7 +55,6 @@ class KNXerTest extends TestCase
         IPS_ApplyChanges($KNXerModulID);
 
         $KNXerInstance = IPS_GetInstance($KNXerModulID);
-        // fwrite(STDERR, print_r($KNXerInstance, true));
         $this->assertEquals(101, $KNXerInstance['InstanceStatus']);
         // $this->assertEquals(1, 1);
     }

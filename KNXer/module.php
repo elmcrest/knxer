@@ -14,58 +14,52 @@ class KNXer extends IPSModule
     public function ApplyChanges()
     {
         parent::ApplyChanges();
-
-        $this->ValidateEtsXmlGroupAddressExport();
+        $this->ValidateXml();
         if ($this->GetStatus() < 200) {
             $this->GenerateBuildingFromImport();
         }
     }
 
     // KX_ValidateEtsXmlGroupAddressExport($id)
-    public function ValidateEtsXmlGroupAddressExport()
+    public function ValidateXml()
     {
-        $rawData = base64_decode($this->ReadPropertyString('EtsXmlFile'));
-
-        if (@simplexml_load_string($rawData)) {
-            $data = simplexml_load_string($rawData);
-            $attr = $data->GroupRange[13]->GroupRange[0]->GroupAddress[0]->attributes();
+        $xml = $this->GetXml();
+        if ($xml) {
+            $attr = $xml->xpath('//k:GroupAddress')[0];
+            echo '#####################';
+            var_dump($attr);
             if (isset($attr['Description'])) {
-                $name = $attr['Name'];
-                $this->SendDebug('KNXer', (string) $name, 0);
                 $this->SetStatus(101);
             } else {
                 $this->SetStatus(202);
                 $this->ShowError("XML File didn't meet the requirements. Is it a ETS5 XML Export file?");
             }
         } else {
-            $this->SetStatus(201);
-            $this->ShowError("XML File couldn't be parsed. Is it a ETS5 XML Export file?");
+            return;
         }
     }
 
     public function GenerateBuildingFromImport()
     {
-        $data = simplexml_load_string(base64_decode($this->ReadPropertyString('EtsXmlFile')));
-        $building = [];
-        foreach ($data as $section) {
-            $exploded = explode('/', (string) $section->attributes()->Name);
-            $part = [];
-            $i = 0;
-            while ($i < count($exploded)) {
-                if ($i == 0) {
-                    $part[$exploded[$i]] = [];
-                } elseif ($i == 1) {
-                    $part[$exploded[$i - 1]][$exploded[$i]] = [];
-                } elseif ($i == 2) {
-                    $part[$exploded[$i - 2]][$exploded[$i - 1]][$exploded[$i]] = [];
-                } else {
-                    throw new Exception();
-                }
-                $i++;
-            }
-            $building = array_merge_recursive($building, $part);
+        // $data = simplexml_load_string(base64_decode($this->ReadPropertyString('EtsXmlFile')));
+        $data = new SimpleXMLElement(base64_decode($this->ReadPropertyString('EtsXmlFile')));
+        // $building = [];
+        // foreach ($data as $section) {
+            // $exploded = explode('/', (string) $section->attributes()->Name);
+            // $part = $this->decompose($exploded, []);
+            // print_r($section);
+            // $building = array_merge_recursive($building, $part);
+        // }
+        // print_r($building);
+    }
+    public function decompose($arr_source, $arr_drain)
+    {
+        $arr_tmp = $arr_source;
+        if (array_pop($arr_tmp) != []) {
+            $arr_drain = [array_pop($arr_source)=>$arr_drain];
+            return $this->decompose($arr_source, $arr_drain);
         }
-        print_r($building);
+        return $arr_drain;
     }
     protected function ShowError(string $ErrorMessage, string $ErrorTitle = 'Error converting group addresses:')
     {
@@ -73,6 +67,20 @@ class KNXer extends IPSModule
         $this->UpdateFormField('ErrorTitle', 'caption', $ErrorTitle);
         $this->UpdateFormField('ErrorText', 'caption', $ErrorMessage);
         $this->UpdateFormField('ErrorPopup', 'visible', true);
+    }
+
+    private function GetXml()
+    {
+        $rawData = base64_decode($this->ReadPropertyString('EtsXmlFile'));
+        if (@simplexml_load_string($rawData)) {
+            $xml = simplexml_load_string($rawData);
+            $xml->registerXPathNamespace('k', 'http://knx.org/xml/ga-export/01');
+            return $xml;
+        } else {
+            $this->SetStatus(201);
+            $this->ShowError("XML File couldn't be parsed. Is it a ETS5 XML Export file?");
+            return;
+        }
     }
     /**
      * Die folgenden Funktionen stehen automatisch zur Verfügung, wenn das Modul über die "Module Control" eingefügt wurden.
