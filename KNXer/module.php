@@ -26,8 +26,6 @@ class KNXer extends IPSModule
         $xml = $this->GetXml();
         if ($xml) {
             $attr = $xml->xpath('//k:GroupAddress')[0];
-            echo '#####################';
-            var_dump($attr);
             if (isset($attr['Description'])) {
                 $this->SetStatus(101);
             } else {
@@ -41,27 +39,25 @@ class KNXer extends IPSModule
 
     public function GenerateBuildingFromImport()
     {
-        // $data = simplexml_load_string(base64_decode($this->ReadPropertyString('EtsXmlFile')));
-        $data = new SimpleXMLElement(base64_decode($this->ReadPropertyString('EtsXmlFile')));
-        // $building = [];
-        // foreach ($data as $section) {
-            // $exploded = explode('/', (string) $section->attributes()->Name);
-            // $part = $this->decompose($exploded, []);
-            // print_r($section);
+        $xml = $this->GetXml();
+
+        // $attr = $xml->xpath("//k:GroupRange[@Name='actuators']") + [null];
+        $building = [];
+        foreach ($xml as $section) {
+            $section->registerXPathNamespace('k', 'http://knx.org/xml/ga-export/01');
+            $exploded = explode('/', (string) $section->attributes()->Name);
+            $part = ArrayToNestedArray($exploded, []);
+            if ($section->xpath("k:GroupRange[@Name='actuators']")) {
+                echo '####actuators###############';
+            }
+            if ($section->xpath("k:GroupRange[@Name='sensors']")) {
+                echo '####sensors###############';
+            }
             // $building = array_merge_recursive($building, $part);
-        // }
+        }
         // print_r($building);
     }
-    public function decompose($arr_source, $arr_drain)
-    {
-        $arr_tmp = $arr_source;
-        if (array_pop($arr_tmp) != []) {
-            $arr_drain = [array_pop($arr_source)=>$arr_drain];
-            return $this->decompose($arr_source, $arr_drain);
-        }
-        return $arr_drain;
-    }
-    protected function ShowError(string $ErrorMessage, string $ErrorTitle = 'Error converting group addresses:')
+    private function ShowError(string $ErrorMessage, string $ErrorTitle = 'Error converting group addresses:')
     {
         IPS_Sleep(500);
         $this->UpdateFormField('ErrorTitle', 'caption', $ErrorTitle);
@@ -98,4 +94,14 @@ class KNXer extends IPSModule
     //     $version = $xml->channel->item->enclosure->attributes("sparkle", true)->shortVersionString;
     //     $this->SetValue("availableVersion", strval($version));
     // }
+}
+
+function ArrayToNestedArray($arr_source, $arr_drain)
+{
+    $arr_tmp = $arr_source;
+    if (array_pop($arr_tmp) != []) {
+        $arr_drain = [array_pop($arr_source)=>$arr_drain];
+        return ArrayToNestedArray($arr_source, $arr_drain);
+    }
+    return $arr_drain;
 }

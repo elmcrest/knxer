@@ -47,7 +47,6 @@ class KNXerTest extends TestCase
     }
     public function testParseXml()
     {
-        echo "\n#################START#####################\n";
         $KNXerModulID = IPS_CreateInstance($this->KNXerID);
         $filestring = base64_encode(file_get_contents(__DIR__ . '/fixtures/ga_test.xml', true));
 
@@ -56,6 +55,22 @@ class KNXerTest extends TestCase
 
         $KNXerInstance = IPS_GetInstance($KNXerModulID);
         $this->assertEquals(101, $KNXerInstance['InstanceStatus']);
-        // $this->assertEquals(1, 1);
+    }
+
+    public function testArrayToNestedArray()
+    {
+        $KNXerModulID = IPS_CreateInstance($this->KNXerID);
+        $KNXerInstanceInfoArray = IPS_GetInstance($KNXerModulID);
+
+        $exploded = explode('/', 'Building/Floor/Room');
+        $actual = ArrayToNestedArray($exploded, []);
+        $expected = [
+            'Building' => [
+                'Floor' => [
+                    'Room' => []
+                ]
+            ]
+        ];
+        $this->assertEquals($expected, $actual);
     }
 }
