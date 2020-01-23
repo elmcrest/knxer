@@ -8,7 +8,14 @@
   <GroupRange Name="Vorderhaus/EG/WohnZi" RangeStart="10240" RangeEnd="12287" />
   <GroupRange Name="Vorderhaus/EG/WC" RangeStart="12288" RangeEnd="14335" />
   <GroupRange Name="Vorderhaus/EG/EssZiKü" RangeStart="14336" RangeEnd="16383" />
-  <GroupRange Name="Vorderhaus/Flur" RangeStart="16384" RangeEnd="18431" />
+  <GroupRange Name="Vorderhaus/Flur" RangeStart="16384" RangeEnd="18431">
+    <GroupRange Name="actuators" RangeStart="16384" RangeEnd="16639">
+      <GroupAddress Name="Stripe" Address="8/0/0" Description="light set switch" DPTs="DPST-1-1" />
+    </GroupRange>
+    <GroupRange Name="sensors" RangeStart="16640" RangeEnd="16895">
+      <GroupAddress Name="Stripe" Address="8/1/0" Description="switch get short" />
+    </GroupRange>
+  </GroupRange>
   <GroupRange Name="Vorderhaus/OG/EssWohnZiKü" RangeStart="18432" RangeEnd="20479" />
   <GroupRange Name="Vorderhaus/OG/Kinderzimmer" RangeStart="20480" RangeEnd="22527" />
   <GroupRange Name="Vorderhaus/OG/SchlafZi" RangeStart="22528" RangeEnd="24575" />

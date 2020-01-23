@@ -16,7 +16,7 @@ class KNXer extends IPSModule
         parent::ApplyChanges();
         $this->ValidateXml();
         if ($this->GetStatus() < 200) {
-            $this->GenerateBuildingFromImport();
+            $this->GenerateBuilding();
         }
     }
 
@@ -37,7 +37,7 @@ class KNXer extends IPSModule
         }
     }
 
-    public function GenerateBuildingFromImport()
+    public function GenerateBuilding()
     {
         $xml = $this->GetXml();
 
@@ -46,13 +46,63 @@ class KNXer extends IPSModule
         foreach ($xml as $section) {
             $section->registerXPathNamespace('k', 'http://knx.org/xml/ga-export/01');
             $exploded = explode('/', (string) $section->attributes()->Name);
+            $actuator_objects = [];
+            foreach ($section->xpath("k:GroupRange[@Name='actuators']") as $actuator) { // can only be a single GroupRange
+                foreach ($actuator->GroupAddress as $groupaddress) {
+                    $key = (string) $groupaddress->attributes()->Name;
+                    $cleaned = [
+                        'Name'        => $key,
+                        'Address'     => (string) $groupaddress->attributes()->Address,
+                        'Description' => (string) $groupaddress->attributes()->Description,
+                        'DPTs'        => (string) $groupaddress->attributes()->DPTs,
+                    ];
+                    if (isset($actuator_objects[$key])) {
+                        array_push($actuator_objects[$key], $cleaned);
+                    } else {
+                        $actuator_objects[$key] = [];
+                        array_push($actuator_objects[$key], $cleaned);
+                    }
+                }
+            }
+
             $part = ArrayToNestedArray($exploded, []);
-            if ($section->xpath("k:GroupRange[@Name='actuators']")) {
-                echo '####actuators###############';
+            if (count($actuator_objects) != 0) {
+                switch (count($exploded)) {
+                    case 0:
+                    break;
+                    case 1:
+                        if (isset($part[$exploded[0]])) {
+                            array_push($part[$exploded[0]], $actuator_objects);
+                        } else {
+                            $part[$exploded[0]] = [];
+                            array_push($part[$exploded[0]], $actuator_objects);
+                        }
+                    break;
+                    case 2:
+                        if (isset($part[$exploded[0]][$exploded[1]])) {
+                            array_push($part[$exploded[0]][$exploded[1]], $actuator_objects);
+                        } else {
+                            $part[$exploded[0]][$exploded[1]] = [];
+                            array_push($part[$exploded[0]][$exploded[1]], $actuator_objects);
+                        }
+                    break;
+                    case 3:
+                        if (isset($part[$exploded[0]][$exploded[1]][$exploded[2]])) {
+                            array_push($part[$exploded[0]][$exploded[1]][$exploded[2]], $actuator_objects);
+                        } else {
+                            $part[$exploded[0]][$exploded[1]][$exploded[2]] = [];
+                            array_push($part[$exploded[0]][$exploded[1]][$exploded[2]], $actuator_objects);
+                        }
+                    break;
+                }
             }
-            if ($section->xpath("k:GroupRange[@Name='sensors']")) {
-                echo '####sensors###############';
+
+            echo '' . print_r($part, true);
+            foreach ($section->xpath("k:GroupRange[@Name='sensors']") as $sensors) {
+                // echo "\n####sensors###############";
+                // echo print_r(array_keys($part), true);
             }
+            // echo "\n#################section#########################";
             // $building = array_merge_recursive($building, $part);
         }
         // print_r($building);
