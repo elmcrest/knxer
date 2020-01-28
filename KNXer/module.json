@@ -1,10 +1,10 @@
 {
     "id": "{9E4B7738-F674-AA63-BF53-0C44E2D80342}",
-    "name": "knxer",
-    "type": 3,
-    "vendor": "KNXer",
+    "name": "KNXer",
+    "type": 4,
+    "vendor": "KNXer Configurator",
     "aliases": [
-        "KNXer"
+        "KNXer Configurator"
     ],
     "url": "https://knxer.raesener.de",
     "parentRequirements": [],

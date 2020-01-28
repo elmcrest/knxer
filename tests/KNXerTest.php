@@ -54,7 +54,7 @@ class KNXerTest extends TestCase
         IPS_ApplyChanges($KNXerModulID);
 
         $KNXerInstance = IPS_GetInstance($KNXerModulID);
-        $this->assertEquals(101, $KNXerInstance['InstanceStatus']);
+        $this->assertEquals(102, $KNXerInstance['InstanceStatus']);
     }
 
     public function testArrayToNestedArray()
