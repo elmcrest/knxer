@@ -54,6 +54,7 @@ class KNXerTest extends TestCase
         IPS_ApplyChanges($KNXerModulID);
 
         $KNXerInstance = IPS_GetInstance($KNXerModulID);
+        KX_ValidateXml($KNXerModulID);
         $this->assertEquals(102, $KNXerInstance['InstanceStatus']);
     }
 
@@ -72,5 +73,12 @@ class KNXerTest extends TestCase
             ]
         ];
         $this->assertEquals($expected, $actual);
+    }
+
+    public function testGetModules()
+    {
+        echo "################################################\n";
+        getModules();
+        $this->assertTrue(true);
     }
 }

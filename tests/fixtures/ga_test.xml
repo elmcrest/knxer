@@ -37,15 +37,13 @@
       <GroupAddress Name="Rollo" Address="13/0/11" Description="shading get position" />
     </GroupRange>
     <GroupRange Name="sensor" RangeStart="26880" RangeEnd="27135">
-      <GroupAddress Name="Stripe" Address="13/1/0" Description="switch set short" />
-      <GroupAddress Name="Stripe" Address="13/1/1" Description="switch set long" />
-      <GroupAddress Name="Stripe" Address="13/1/2" Description="switch set led" />
-      <GroupAddress Name="Spiegel" Address="13/1/3" Description="switch set short" />
-      <GroupAddress Name="Spiegel" Address="13/1/4" Description="switch set long" />
-      <GroupAddress Name="Spiegel" Address="13/1/5" Description="switch set led" />
-      <GroupAddress Name="Rollo" Address="13/1/6" Description="switch get short" />
-      <GroupAddress Name="Rollo" Address="13/1/7" Description="switch get long" />
-      <GroupAddress Name="Rollo" Address="13/1/8" Description="switch set led" />
+      <GroupAddress Name="Stripe" Address="13/1/0" Description="set switch" DPTs="DPST-1-1" />
+      <GroupAddress Name="Stripe" Address="13/1/1" Description="set led" DPTs="DPST-1-1" />
+      <GroupAddress Name="Spiegel" Address="13/1/2" Description="set switch" DPTs="DPST-1-1" />
+      <GroupAddress Name="Spiegel" Address="13/1/3" Description="set led" DPTs="DPST-1-1" />
+      <GroupAddress Name="Rollo" Address="13/1/4" Description="set switch" DPTs="DPST-1-1" />
+      <GroupAddress Name="Rollo" Address="13/1/5" Description="set led" DPTs="DPST-1-1" />
+      <GroupAddress Name="central" Address="13/1/6" Description="set on" DPTs="DPST-1-1" />
     </GroupRange>
   </GroupRange>
   <GroupRange Name="Vorderhaus/DG" RangeStart="28672" RangeEnd="30719" />

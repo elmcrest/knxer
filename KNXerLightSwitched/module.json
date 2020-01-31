@@ -1,0 +1,18 @@
+{
+    "id": "{AE5656F2-CDDB-A91C-8212-AAB012E490A6}",
+    "name": "KNXer Light Switched",
+    "type": 3,
+    "vendor": "KNXer Light Switched",
+    "aliases": [
+        "KNXer Light Switched"
+    ],
+    "url": "https://knxer.raesener.de",
+    "parentRequirements": [
+        "{42DFD4E4-5831-4A27-91B9-6FF1B2960260}"
+    ],
+    "childRequirements": [],
+    "implemented": [
+        "{8A4D3B17-F8D7-4905-877F-9E69CEC3D579}"
+    ],
+    "prefix": "KX"
+}

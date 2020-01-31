@@ -16,36 +16,81 @@ class KNXer extends IPSModule
     {
         parent::ApplyChanges();
         $this->ValidateXml();
+    }
+
+    public function BuildStructure()
+    {
         if ($this->GetStatus() < 200) {
             $building_serialized = $this->GenerateBuilding();
             $this->WriteAttributeString('KNXBuildingRepresentation', $building_serialized);
             $this->CreateObjectTree(unserialize($building_serialized), 0, '');
         }
     }
-
     public function CreateObjectTree($root, $parentId, $key)
     {
         if ($key) {
             $parentId = $this->CreateCategoryByIdent(StringToSlug($key), $key, $parentId);
         }
         foreach ($root as $key => $sub) {
-            $this->CreateCategoryByIdent(StringToSlug($key), $key, $parentId);
+            $momId = $this->CreateCategoryByIdent(StringToSlug($key), $key, $parentId);
             if (isAssoc($sub)) {
                 $this->CreateObjectTree($sub, $parentId, $key);
             } else {
-                $this->CreateSmartObject($sub);
+                $this->CreateSmartObject($sub, $momId);
             }
         }
     }
-    public function CreateSmartObject($arr)
+    public function CreateSmartObject($arr, $parentId)
     {
+        $AvailableModules = getModules();
+        // echo "\n" . var_dump($AvailableModules['KNX DPT 1']);
         if (!array_key_exists(0, $arr)) {
             return;
         }
         foreach ($arr[0] as $key => $smartObject) {
-            echo "\n#####################################################\n";
-            echo '$key: ' . print_r($key, true) . "\n";
-            echo '$smartObject: ' . print_r($smartObject, true);
+            $InstanceID = @IPS_GetInstanceIDByName($key, $parentId);
+            if (!$InstanceID) {
+                $InstanceID = IPS_CreateInstance($AvailableModules['Dummy Module']);
+                IPS_SetName($InstanceID, $key);
+                IPS_SetParent($InstanceID, $parentId);
+            }
+            foreach ($smartObject as $key => $participant) {
+                $GroupAddress = explode('/', $participant['Address']);
+                switch ($participant['Description']) {
+                    case 'light set switch':
+                        $dptID = @IPS_GetInstanceIDByName('light set switch', $InstanceID);
+                        if (!$dptID) {
+                            $newID = IPS_CreateInstance($AvailableModules['KNX DPT 1']);
+                            IPS_SetName($newID, 'light set switch');
+                            IPS_SetParent($newID, $InstanceID);
+                            IPS_SetConfiguration($newID, '{"Address1":' . $GroupAddress[0] . ',"Address2":' . $GroupAddress[1] . ',"Address3":' . $GroupAddress[2] . ',"Mapping":"[]","Dimension":1,"CapabilityReceive":true,"CapabilityRead":false,"CapabilityTransmit":false,"CapabilityWrite":true}');
+                            IPS_ApplyChanges($newID);
+                        }
+                    break;
+                    // case 'light get switch':
+                    //     $dptID = @IPS_GetInstanceIDByName('light set value', $InstanceID);
+                    //     if (!$dptID) {
+                    //         $newID = IPS_CreateInstance($AvailableModules['KNX DPT 5']);
+                    //         IPS_SetName($newID, 'light set value');
+                    //         IPS_SetParent($newID, $InstanceID);
+                    //         IPS_SetConfiguration($newID, '{"Address1":' . $GroupAddress[0] . ',"Address2":' . $GroupAddress[1] . ',"Address3":' . $GroupAddress[2] . ',"Mapping":"[]","Dimension":1,"CapabilityReceive":true,"CapabilityRead":true,"CapabilityTransmit":false,"CapabilityWrite":false}');
+                    //         IPS_ApplyChanges($newID);
+                    //     }
+                    // break;
+                    // case 'light set switch':
+                    //     $dptID = @IPS_GetVariableIDByName('light set switch', $InstanceID);
+                    //     if (!$dptID) {
+                    //         // $newID = IPS_CreateInstance($AvailableModules['KNX DPT 1']);
+                    //         $newID = IPS_CreateVariable(0);
+                    //         IPS_SetName($newID, 'light set switch');
+                    //         IPS_SetParent($newID, $InstanceID);
+                    //         #IPS_SetConfiguration($newID, '{"Address1":' . $GroupAddress[0] . ',"Address2":' . $GroupAddress[1] . ',"Address3":' . $GroupAddress[2] . ',"Mapping":"[]","Dimension":1,"CapabilityReceive":true,"CapabilityRead":false,"CapabilityTransmit":false,"CapabilityWrite":true}');
+                    //         IPS_SetVariableCustomProfile($newID, '~Switch.KNX');
+                    //         // IPS_ApplyChanges($newID);
+                    //     }
+                    // break;
+                }
+            }
         }
     }
     // KX_ValidateEtsXmlGroupAddressExport($id)
@@ -208,4 +253,13 @@ function isAssoc(&$arr)
     } else {
         return false;
     }
+}
+
+function getModules()
+{
+    foreach (IPS_GetModuleList() as $guid) {
+        $module = IPS_GetModule($guid);
+        $pair[$module['ModuleName']] = $guid;
+    }
+    return $pair;
 }

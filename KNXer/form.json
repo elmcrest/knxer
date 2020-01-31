@@ -30,7 +30,13 @@
             }
         }
     ],
-    "actions": [],
+    "actions": [
+        {
+            "type": "Button",
+            "label": "Run KNXer",
+            "onClick": "KX_BuildStructure($id);"
+        }
+    ],
     "status": [
         {
             "code": 201,
